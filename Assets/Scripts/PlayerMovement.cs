@@ -23,6 +23,9 @@ public class PlayerMovement : MonoBehaviour {
 
 	public LayerMask groundLayer;
 
+	public GameObject hitBox;
+	public Vector2 hitboxOffset;
+
 	// Use this for initialization
 	void Start () {
 		groundCheckCircRad = .5f;
@@ -112,7 +115,7 @@ public class PlayerMovement : MonoBehaviour {
 			grounded = false;
 		}
 
-		if((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && grounded && !justJumped) {
+		if((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && grounded && !justJumped) {
 			//if we're on the ground and haven't just jumped, we'll jump. we'll use 'justjumped' to tell our anims not to switch unless it's time.
 			justJumped = true;
 			myBody.velocity = new Vector2 (speed, jumpSpeed);
@@ -157,6 +160,11 @@ public class PlayerMovement : MonoBehaviour {
 		} else {
 			animator.SetBool ("falling", false);
 		}
+
+		//Adding Attack functionality
+		if (Input.GetKeyDown (KeyCode.Space)) {
+			Attack();
+		}
 	
 	}
 
@@ -171,6 +179,23 @@ public class PlayerMovement : MonoBehaviour {
 		}
 	}
 
+	void Attack(){
+
+		//switch sides if we've switched directions!
+		float xSpawn = hitboxOffset.x;
+		if (transform.GetComponent<SpriteRenderer> ().flipX) {
+			xSpawn *= -1;
+		}
+
+		//instantiate a hitbox
+		HitBox newHit = Instantiate (hitBox, new Vector3 (transform.position.x + xSpawn, transform.position.y +  hitboxOffset.y, 0), Quaternion.identity, transform).GetComponent<HitBox>();
+
+		if (grounded) {
+			animator.Play ("playerHit_ground");
+		} else {
+			animator.Play ("playerHit_air");
+		}
+	}
 
 	void changePlayerType(PlayerType _type){
 

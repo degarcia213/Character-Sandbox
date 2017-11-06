@@ -23,6 +23,8 @@ public class Player : MonoBehaviour {
 
 	public LayerMask groundLayer;
 
+	public GameObject hitBox;
+
 	// Use this for initialization
 	void Start () {
 		groundCheckCircRad = .5f;
@@ -136,7 +138,7 @@ public class Player : MonoBehaviour {
 			grounded = false;
 		}
 
-		if((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && grounded && !justJumped) {
+		if((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && grounded && !justJumped) {
 			//if we're on the ground and haven't just jumped, we'll jump. we'll use 'justjumped' to tell our anims not to switch unless it's time.
 			justJumped = true;
 			myBody.velocity = new Vector2 (speed, jumpSpeed);
@@ -160,6 +162,17 @@ public class Player : MonoBehaviour {
 		if (playerType != lastType) {
 			changePlayerType(playerType);
 		}
+
+		//Adding Attack functionality
+		if (Input.GetKeyDown (KeyCode.Space)) {
+			Attack();
+		}
+	}
+
+	void Attack(){
+
+
+
 	}
 
 	void changePlayerType(PlayerType _type){
